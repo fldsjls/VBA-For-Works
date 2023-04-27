@@ -1,8 +1,8 @@
 Attribute VB_Name = "文件夹更新"
 Sub Copy()
     '创建对计算机文件系统访问的对象
-    Dim Fso As Object
-    Set Fso = CreateObject("Scripting.FileSystemObject")
+    Dim fso As Object
+    Set fso = CreateObject("Scripting.FileSystemObject")
     
     ' 定义SourceFolder的路径并在窗口输入
     Dim SourceFolder As String
@@ -35,7 +35,7 @@ Sub Copy()
     DestinationFolder = ParentDestinationFolder & DestinationFolderName
     
     '使用Fso.CopyFolder，将SourceFolder文件夹复制到DestinationFolder
-    Fso.CopyFolder SourceFolder, DestinationFolder
+    fso.CopyFolder SourceFolder, DestinationFolder
     MsgBox "成功复制", vbInformation
     
     '调用Delete函数进行删除操作，参数为DestinationFolder
@@ -43,7 +43,7 @@ Sub Copy()
     MsgBox "成功删除", vbInformation
         
     '调用Rename函数进行文件重命名
-    Call Rename(DestinationFolder, Fso, NewMonth)
+    Call Rename(DestinationFolder, fso, NewMonth)
     MsgBox "成功命名", vbInformation
     
     '退出所有Wd程序
@@ -58,15 +58,15 @@ End Sub
 Sub Delete(DestinationFolder As String)
 
     '创建对计算机文件系统访问的对象
-    Dim Fso As Object
-    Set Fso = CreateObject("Scripting.FileSystemObject")
+    Dim fso As Object
+    Set fso = CreateObject("Scripting.FileSystemObject")
     
     '遍历目标文件夹的子文件夹和文件，删除它们
     Dim Folder As Object
-    Set Folder = Fso.GetFolder(DestinationFolder)
+    Set Folder = fso.GetFolder(DestinationFolder)
     For Each Subfolder In Folder.SubFolders
         For Each File In Subfolder.Files
-            Fso.DeleteFile File.Path, True
+            fso.DeleteFile File.Path, True
         Next
         '通过将SubFolder文件的路径赋值给Delete过程的变量进行递归
         Call Delete(Subfolder.Path)
@@ -74,14 +74,14 @@ Sub Delete(DestinationFolder As String)
     
 End Sub
 
-Sub Rename(DestinationFolder As String, Fso As Object, NewMonth As String)
+Sub Rename(DestinationFolder As String, fso As Object, NewMonth As String)
         
     Dim OldName As String
     Dim NewName As String
     
     '获得DestinationFolder选项的文件对象
     Dim Folder As Object
-    Set Folder = Fso.GetFolder(DestinationFolder)
+    Set Folder = fso.GetFolder(DestinationFolder)
     
     '使用了 VBScript.RegExp 类来创建一个正则表达式对象
     Dim RegExp As Object

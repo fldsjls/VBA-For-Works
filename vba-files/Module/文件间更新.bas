@@ -1,6 +1,6 @@
 Attribute VB_Name = "文件间更新"
 Sub Copy()
-    
+
     '定义新的DestinationFolder并对其赋值
     Dim DestinationFolder As String
     DestinationFolder = InputBox("请输入目标文件夹的路径") & "\"
@@ -16,13 +16,6 @@ Sub Copy()
     Call WordUpdate委托书(DestinationFolder)
     Call WordUpdate收款确认书(DestinationFolder)
     MsgBox "更新成功！", vbInformation
-    
-    '退出所有Wd程序
-    On Error Resume Next
-    For Each WdApp In GetObject(, "Word.Application")
-        WdApp.Quit
-    Next
-    On Error GoTo 0
     
 End Sub
 
@@ -46,9 +39,9 @@ Sub ExcelUpdate工资表(DestinationFolder As String)
     Dim RngSource As Range
     Dim RngTarget As Range
     
-    Set WbTarget = Workbooks.Open(WbTargetFile, 0, False)
+    Set WbTarget = Workbooks.Open(WbTargetFile, 3, False)
     Set WsTarget = WbTarget.Worksheets("工资表")
-    Set WbSource = Workbooks.Open(WbSourceFile, 0, False)
+    Set WbSource = Workbooks.Open(WbSourceFile, 3, False)
     Set WsSource = WbSource.Worksheets("工资表")
     
     '设置目标数据区域为目标工作表的相同大小区域，以A1单元格为起点
@@ -61,8 +54,8 @@ Sub ExcelUpdate工资表(DestinationFolder As String)
     
     '清空剪切板上的内容防止弹窗，同时关闭活动工作簿
     Application.CutCopyMode = False
-    WbTarget.Close SaveChanges = True
-    WbSource.Close SaveChanges = True
+    WbTarget.Close Savechanges:=True
+    WbSource.Close Savechanges:=True
     
 End Sub
 
@@ -85,14 +78,14 @@ Sub ExcelUpdate出入库(DestinationFolder As String)
     Dim RngSource As Range
     Dim RngTarget As Range
     
-    Set WbTarget = Workbooks.Open(WbTargetFile, 0, False)
+    Set WbTarget = Workbooks.Open(WbTargetFile, 3, False)
     Set WsTarget = WbTarget.Worksheets("班组结算汇总表")
-    Set WbSource = Workbooks.Open(WbSourceFile, 0, False)
+    Set WbSource = Workbooks.Open(WbSourceFile, 3, False)
     Set WsSource = WbSource.Worksheets("班组结算汇总表")
     
     '设置目标数据区域为目标工作表的相同大小区域，以A1单元格为起点
-    Set RngSource = WsSource.Range("B7:J7")
-    Set RngTarget = WsTarget.Range("B7:J7")
+    Set RngSource = WsSource.Range("A5:J7")
+    Set RngTarget = WsTarget.Range("A5:J7")
     
     '复制源数据区域到目标数据区域，并使用PasteSpecial xlPasteFormulas进行链接
     RngSource.Copy
@@ -100,8 +93,8 @@ Sub ExcelUpdate出入库(DestinationFolder As String)
     
     '清空剪切板上的内容防止弹窗，同时关闭活动工作簿
     Application.CutCopyMode = False
-    WbTarget.Close SaveChanges = True
-    WbSource.Close SaveChanges = True
+    WbTarget.Close Savechanges:=True
+    WbSource.Close Savechanges:=True
     
 End Sub
 
@@ -113,7 +106,7 @@ Sub WordUpdate委托书(DestinationFolder As String)
     
     '利用Dir和&得到WdTemplateFile文件路径，并定义一个文件模板变量
     Dim WdTemplateFile As String
-    WdTemplateFile = "E:\1Data management\2工作资料\3公司工作\3工作记录\自动化模板\委托书模板.docx"
+    WdTemplateFile = "E:\1Data Management\2Work Material\3公司工作\3工作记录\自动化模板\委托书模板.docx"
     
     '用Open的方法打开WdTemplateFile文件返回WdDoc对象
     Dim WdDoc As Word.Document
@@ -129,7 +122,7 @@ Sub WordUpdate委托书(DestinationFolder As String)
 
     '用Open的方法打开ExcelFile文件返回ExcelWb对象
     Dim ExcelWb As Workbook
-    Set ExcelWb = Workbooks.Open(ExcelFile)
+    Set ExcelWb = Workbooks.Open(ExcelFile, 3)
     
     '将单元格的内容赋值给LinkAddress数组
     Dim LinkAddress(1 To 6) As Excel.Range
@@ -176,7 +169,7 @@ Sub WordUpdate委托书(DestinationFolder As String)
     
     '清空剪切板上的内容防止弹窗，关闭Excel文件，另存为Word文件
     Application.CutCopyMode = False
-    ExcelWb.Close SaveChanges = True
+    ExcelWb.Close Savechanges:=True
     WdDoc.SaveAs2 Filename:=WdFile, FileFormat:=wdFormatXMLDocument
     WdDoc.Close
     
@@ -194,7 +187,7 @@ Sub WordUpdate收款确认书(DestinationFolder As String)
     
     '利用Dir和&得到WdTemplateFile文件路径，并定义一个文件模板变量
     Dim WdTemplateFile As String
-    WdTemplateFile = "E:\1Data management\2工作资料\3公司工作\3工作记录\自动化模板\收款确认书模板.docx"
+    WdTemplateFile = "E:\1Data Management\2Work Material\3公司工作\3工作记录\自动化模板\收款确认书模板.docx"
     
     '用Open的方法打开WdTemplateFile文件返回WdDoc对象
     Dim WdDoc As Word.Document
@@ -210,7 +203,7 @@ Sub WordUpdate收款确认书(DestinationFolder As String)
 
     '用Open的方法打开ExcelFile文件返回ExcelWb对象
     Dim ExcelWb As Workbook
-    Set ExcelWb = XlApp.Workbooks.Open(ExcelFile)
+    Set ExcelWb = XlApp.Workbooks.Open(ExcelFile, 3)
     
     '将单元格的内容赋值给LinkAddress数组
     Dim LinkAddress(1 To 6) As Excel.Range
@@ -257,7 +250,7 @@ Sub WordUpdate收款确认书(DestinationFolder As String)
     
     '清空剪切板上的内容防止弹窗，关闭Excel文件，另存为Word文件
     Application.CutCopyMode = False
-    ExcelWb.Close SaveChanges = True
+    ExcelWb.Close Savechanges:=True
     WdDoc.SaveAs2 Filename:=WdFile, FileFormat:=wdFormatXMLDocument
     WdDoc.Close
     
